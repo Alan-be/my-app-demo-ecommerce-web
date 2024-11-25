@@ -1,9 +1,11 @@
+import { getUserAndSesion } from "@/utils/supabase/getUser";
 import React from "react";
 
 interface PropertiesProducts {
   id: number;
   name: string;
   price: number;
+  image_url: string;
   category: string;
 }
 
@@ -13,6 +15,18 @@ interface CardProductsGridProps {
 }
 
 const CardProductsGrid: React.FC<CardProductsGridProps> = ({ title, dataProducts }) => {
+
+
+
+    const addCart = async() => {
+
+        const authStatus = await getUserAndSesion()
+        console.log(authStatus,"stats");
+        
+
+
+    }
+    
   return (
     <div className="bg-gray-200 dark:bg-background p-8 sm:p-16 w-screen">
       <div className="mb-4 p-4 font-medium text-center text-lg dark:text-gray-100 first-letter:capitalize leading-tight">
@@ -26,14 +40,14 @@ const CardProductsGrid: React.FC<CardProductsGridProps> = ({ title, dataProducts
               {/* Aquí puedes personalizar el contenido con las propiedades del producto */}
               <img
                 className="group-hover:h-64 rounded-2xl w-full h-full transition-all duration-300 delay-150 ease object-cover"
-                src="https://static.nike.com/a/images/t_PDP_1728_v1/f_auto,q_auto:eco,u_126ab356-44d8-4a06-89b4-fcdcc8df0245,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/f014625e-1a1d-4944-8395-46a07841a794/JORDAN+SPIZIKE+LOW.png"
+                src={item.image_url}
                 alt={item.name}
               />
               <div className="group-hover:mb-0 bottom-0 left-0 absolute bg-gray-100 dark:bg-gray-700 -mb-44 rounded-b-2xl w-full h-40 transition-all duration-300 delay-150 ease">
                 <div className="p-6">
                   <div className="flex justify-between items-center gap-4 capitalize">
                     <div>
-                      <h2 className="font-bold text-lg text-red-600">
+                      <h2 className="font-bold text-lg text-primary-light">
                         {item.name}
                       </h2>
                       <p className="dark:text-gray-100">{item.category}</p>
@@ -46,8 +60,8 @@ const CardProductsGrid: React.FC<CardProductsGridProps> = ({ title, dataProducts
                   </div>
                   <div className="block mt-4">
                     <div className="bottom-2 left-5 absolute">
-                      <button className="bg-red-600 opacity-90 hover:opacity-100 px-4 py-2.5 rounded-xl font-medium text-gray-100">
-                        Add to cart
+                      <button className="bg-primary-dark opacity-90 hover:opacity-100 px-4 py-2.5 rounded-xl font-medium text-gray-100" onClick={addCart}>
+                        Añadir al carrito
                       </button>
                     </div>
                   </div>

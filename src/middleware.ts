@@ -13,7 +13,7 @@ export const config = {
         '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$|about|contact).*)',
         
         // Middleware explícito para otras rutas
-        '/home',
+
         '/dashboard/:path*', // Aplica a cualquier ruta bajo /dashboard
       ]
 }
