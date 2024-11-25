@@ -2,13 +2,18 @@ import { type NextRequest } from "next/server";
 import { updateSession} from "@/utils/supabase/middleware";
 
 export async function middleware(request: NextRequest){
-    console.log("Middleware ejecutado para la ruta:", request.nextUrl.pathname);
+
 
     return await updateSession(request)
 }
 
 export const config = {
     matcher: [
-        '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
-    ]
+        // Aplica el middleware a todo excepto rutas específicas (ej.: "/about", "/contact")
+        '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$|about|contact).*)',
+        
+        // Middleware explícito para otras rutas
+        '/home',
+        '/dashboard/:path*', // Aplica a cualquier ruta bajo /dashboard
+      ]
 }

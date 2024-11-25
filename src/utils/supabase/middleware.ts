@@ -35,12 +35,13 @@ export async function updateSession(request: NextRequest){
         data: {user},
     } = await supabase.auth.getUser()
 
-    console.log(user,"s");
     
     if (
         !user &&
         !request.nextUrl.pathname.startsWith('/login') &&
-        !request.nextUrl.pathname.startsWith('/auth')
+        !request.nextUrl.pathname.startsWith('/') &&
+        !request.nextUrl.pathname.startsWith('/signup') 
+
     ) {
         console.log('Redirigiendo a login desde:', request.nextUrl.pathname);
 

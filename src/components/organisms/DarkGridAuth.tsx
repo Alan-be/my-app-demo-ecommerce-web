@@ -8,11 +8,11 @@ import { BsTwitter } from "react-icons/bs";
 
 export const DarkGridAuth = () => {
   return (
-    <div className="bg-zinc-950 selection:bg-zinc-600 py-20 text-zinc-200">
-      <BubbleButton className="top-6 left-4 absolute text-sm">
+    <div className="bg-zinc-950 selection:bg-blue py-20 text-zinc-200">
+      {/* <BubbleButton className="top-6 left-4 absolute text-sm">
         <FiArrowLeft />
         Go back
-      </BubbleButton>
+      </BubbleButton> */}
 
       <motion.div
         initial={{

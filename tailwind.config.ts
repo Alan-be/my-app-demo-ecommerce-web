@@ -14,18 +14,18 @@ export default {
             "primary-dark": "#063217",
             "primary-light": "#128c41",
 
-            secondary: "#0c315f",
-            "secondary-content": "#7cafee",
-            "secondary-dark": "#061a32",
-            "secondary-light": "#12488c",
+            secondary: "#0c5f55",
+            "secondary-content": "#7ceee1",
+            "secondary-dark": "#06322c",
+            "secondary-light": "#128c7e",
 
-            background: "#eff1ef",
-            foreground: "#fbfbfb",
-            border: "#dde2df",
+            background: "#181b19",
+            foreground: "#242826",
+            border: "#3d433f",
 
-            copy: "#232926",
-            "copy-light": "#5e6e64",
-            "copy-lighter": "#84958a",
+            copy: "#fbfbfb",
+            "copy-light": "#d7dbd8",
+            "copy-lighter": "#a1aaa5",
 
             success: "#0c5f0c",
             warning: "#5f5f0c",
