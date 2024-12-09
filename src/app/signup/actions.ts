@@ -1,13 +1,14 @@
-// handleSubmit.tsx
-"use server";
 
-import { redirect } from "next/navigation";
-import { signup } from "@/app/login/actions"; // Adjust the import path accordingly
+"use server";
+import { signup } from "@/app/login/actions"; 
 
 export async function handleSubmit(formData: FormData) {
+  let response : any = false
   const email = formData.get("email") as string;
   const password = formData.get("password") as string;
   const retypePassword = formData.get("rt-password") as string;
+
+
 
   if (!email || !password || !retypePassword) {
     throw new Error("All fields are required.");
@@ -18,11 +19,9 @@ export async function handleSubmit(formData: FormData) {
   }
 
   try {
-    await signup({ email, password });
+    response = await signup({ email, password });
+    return response
   } catch (error: any) {
-    throw new Error(error.message || "An error occurred during sign-up.");
-  } finally {
-        redirect("/");
-
-  }
+    return { success: false, message: error.message || "An error occurred during sign-up." };
+  } 
 }

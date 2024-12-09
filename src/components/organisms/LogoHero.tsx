@@ -26,8 +26,8 @@ import { IconType } from "react-icons";
 
 const LogoHero = () => {
   return (
-    <section className="bg-background pt-12 pb-12">
-      <div className="flex flex-col items-center px-8 py-12 md:py-20 w-full">
+    <section className="bg-background pt-12 pb-12 w-full">
+      <div className="flex flex-col items-center px-8 py-12 md:py-20">
         <h1 className="max-w-xl font-semibold text-4xl text-center md:text-6xl">
         El paraíso de los sabores te espera.
         </h1>

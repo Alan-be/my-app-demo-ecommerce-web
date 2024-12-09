@@ -10,7 +10,9 @@ export async function getUserAndSesion() {
 
     const { data: { user }, error } = await supabase.auth.getUser();
 
-    console.log(user)
+    if(error || !user){
+        return false
+    }
 
-    return !!user;
+    return user;
 }

@@ -1,19 +1,17 @@
 "use client"
 import React, { ReactNode } from "react";
-import { SiGithub } from "react-icons/si";
-import { FiArrowLeft } from "react-icons/fi";
 import { motion } from "framer-motion";
 import { twMerge } from "tailwind-merge";
-import { BsTwitter } from "react-icons/bs";
+import { handleSubmitLogin } from "@/app/actions/bridgeFunctions";
+import { useDispatch } from "react-redux";
+import { toast, ToastContainer } from "react-toastify";
+import { useRouter } from "next/navigation";
+import { handleUserCreation } from "@/utils/reduxActions/reduxActions";
+import "react-toastify/dist/ReactToastify.css";
 
 export const DarkGridAuth = () => {
   return (
-    <div className="bg-zinc-950 selection:bg-blue py-20 text-zinc-200">
-      {/* <BubbleButton className="top-6 left-4 absolute text-sm">
-        <FiArrowLeft />
-        Go back
-      </BubbleButton> */}
-
+    <div className="bg-zinc-950 selection:bg-blue lg:py-36 text-zinc-200">
       <motion.div
         initial={{
           opacity: 0,
@@ -29,94 +27,70 @@ export const DarkGridAuth = () => {
         }}
         className="relative z-10 mx-auto p-4 w-full max-w-xl"
       >
-        <Heading />
-
-        <SocialOptions />
-        <Or />
+        {/* <SocialOptions />
+        <Or /> */}
         <Email />
         <Terms />
       </motion.div>
-
       <CornerGrid />
-    </div>
-  );
-};
-
-const Heading = () => (
-  <div>
-    <NavLogo />
-    <div className="space-y-1.5 mt-6 mb-9">
-      <h1 className="font-semibold text-2xl">Sign in to your account</h1>
-      <p className="text-zinc-400">
-        Don't have an account?{" "}
-        <a href="#" className="text-blue-400">
-          Create one.
-        </a>
-      </p>
-    </div>
-  </div>
-);
-
-const SocialOptions = () => (
-  <div>
-    <div className="flex gap-3 mb-3">
-      <BubbleButton className="flex justify-center py-3 w-full">
-        <BsTwitter />
-      </BubbleButton>
-      <BubbleButton className="flex justify-center py-3 w-full">
-        <SiGithub />
-      </BubbleButton>
-    </div>
-    <BubbleButton className="flex justify-center py-3 w-full">
-      Sign in with SSO
-    </BubbleButton>
-  </div>
-);
-
-const Or = () => {
-  return (
-    <div className="flex items-center gap-3 my-6">
-      <div className="bg-zinc-700 w-full h-[1px]" />
-      <span className="text-zinc-400">OR</span>
-      <div className="bg-zinc-700 w-full h-[1px]" />
+      <ToastContainer position="bottom-right" /> 
     </div>
   );
 };
 
 const Email = () => {
+  const dispatch = useDispatch()
+  const router = useRouter()
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault(); 
+    const formData = new FormData(e.currentTarget);
+
+    try {
+      const response = await handleSubmitLogin(formData); 
+
+      response.success ? handleUserCreation(response.data, dispatch, router) : toast.error("An error occurred.")
+      
+    } catch (error:any) {
+      toast.error(error.message || "An error occurred."); 
+    }
+  };
+  
   return (
-    <form onSubmit={(e) => e.preventDefault()}>
-      <div className="mb-3">
-        <label htmlFor="email-input" className="block mb-1.5 text-zinc-400">
-          Email
+    <form onSubmit={handleSubmit}>
+    <div className="mb-3">
+      <label htmlFor="email-input" className="block mb-1.5 text-zinc-400">
+        Email
+      </label>
+      <input
+        id="email-input"
+        name="email" // Este nombre debe coincidir con lo que esperas en `formData`
+        type="email"
+        placeholder="your.email@provider.com"
+        className="border-zinc-700 bg-zinc-900 px-3 py-2 border rounded-md ring-1 ring-transparent focus:ring-blue-700 w-full transition-shadow placeholder-zinc-500 focus:outline-0"
+      />
+    </div>
+    <div className="mb-6">
+      <div className="flex justify-between items-end mb-1.5">
+        <label htmlFor="password-input" className="block text-zinc-400">
+          Password
         </label>
-        <input
-          id="email-input"
-          type="email"
-          placeholder="your.email@provider.com"
-          className="border-zinc-700 bg-zinc-900 px-3 py-2 border rounded-md ring-1 ring-transparent focus:ring-blue-700 w-full transition-shadow placeholder-zinc-500 focus:outline-0"
-        />
+        <a href="#" className="text-blue-400 text-sm">
+          Forgot?
+        </a>
       </div>
-      <div className="mb-6">
-        <div className="flex justify-between items-end mb-1.5">
-          <label htmlFor="password-input" className="block text-zinc-400">
-            Password
-          </label>
-          <a href="#" className="text-blue-400 text-sm">
-            Forgot?
-          </a>
-        </div>
-        <input
-          id="password-input"
-          type="password"
-          placeholder="••••••••••••"
-          className="border-zinc-700 bg-zinc-900 px-3 py-2 border rounded-md ring-1 ring-transparent focus:ring-blue-700 w-full transition-shadow placeholder-zinc-500 focus:outline-0"
-        />
-      </div>
-      <SplashButton type="submit" className="w-full">
-        Sign in
-      </SplashButton>
-    </form>
+      <input
+        id="password-input"
+        name="password" 
+        type="password"
+        placeholder="••••••••••••"
+        className="border-zinc-700 bg-zinc-900 px-3 py-2 border rounded-md ring-1 ring-transparent focus:ring-blue-700 w-full transition-shadow placeholder-zinc-500 focus:outline-0"
+      />
+    </div>
+    <SplashButton type="submit" className="w-full">
+      Sign in
+    </SplashButton>
+  </form>
   );
 };
 

@@ -1,5 +1,8 @@
-import { getUserAndSesion } from "@/utils/supabase/getUser";
+import { getOrCreateCart } from "@/app/actions/actions";
+import {  addProductToActiveCart, selectActiveCart, selectCart, setActiveCart } from "@/app/lib/features/shoppingCartSlice/shoppingCartSlice";
+import { selectUserId, setCartId } from "@/app/lib/features/userSlice/userSlice";
 import React from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 interface PropertiesProducts {
   id: number;
@@ -15,16 +18,16 @@ interface CardProductsGridProps {
 }
 
 const CardProductsGrid: React.FC<CardProductsGridProps> = ({ title, dataProducts }) => {
+    const user_id = useSelector(selectUserId);
+    const cart = useSelector(selectCart)
+    const dispatch = useDispatch();
 
-
-
-    const addCart = async() => {
-
-        const authStatus = await getUserAndSesion()
-        console.log(authStatus,"stats");
-        
-
-
+    console.log(cart,"cart");
+    
+    const addCart = async (item:any) => {
+      const cart_id = await getOrCreateCart(user_id);
+      user_id ? dispatch(setActiveCart({customer_id: user_id,id: cart_id})) : dispatch(setActiveCart({}));
+      dispatch(addProductToActiveCart({product_id: item.id, quantity: 1}))
     }
     
   return (
@@ -37,7 +40,6 @@ const CardProductsGrid: React.FC<CardProductsGridProps> = ({ title, dataProducts
         <div className="gap-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 mx-auto w-fit">
           {dataProducts.map((item) => (
             <div key={item.id} className="relative bg-gray-200 shadow-lg rounded-2xl h-[400px] overflow-hidden group">
-              {/* Aquí puedes personalizar el contenido con las propiedades del producto */}
               <img
                 className="group-hover:h-64 rounded-2xl w-full h-full transition-all duration-300 delay-150 ease object-cover"
                 src={item.image_url}
@@ -60,7 +62,7 @@ const CardProductsGrid: React.FC<CardProductsGridProps> = ({ title, dataProducts
                   </div>
                   <div className="block mt-4">
                     <div className="bottom-2 left-5 absolute">
-                      <button className="bg-primary-dark opacity-90 hover:opacity-100 px-4 py-2.5 rounded-xl font-medium text-gray-100" onClick={addCart}>
+                      <button className="bg-primary-dark opacity-90 hover:opacity-100 px-4 py-2.5 rounded-xl font-medium text-gray-100" onClick={() => addCart(item)}>
                         Añadir al carrito
                       </button>
                     </div>

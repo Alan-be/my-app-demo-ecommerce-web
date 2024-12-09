@@ -1,12 +1,14 @@
 import { configureStore } from '@reduxjs/toolkit'
 import  productsReducer  from './features/productsSlice/productsSlice'
 import shoppingReducer from "@/app/lib/features/shoppingCartSlice/shoppingCartSlice"
+import userReducer from "@/app/lib/features/userSlice/userSlice"
 
 export const makeStore = () => {
   return configureStore({
     reducer: {
-      products: productsReducer, // Usa el reducer aquí
-      shoppingCart: shoppingReducer
+      products: productsReducer, 
+      shoppingCart: shoppingReducer,
+      user: userReducer
     },
   })
 }

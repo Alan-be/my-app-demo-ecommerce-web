@@ -3,14 +3,22 @@ import { FiArrowUpRight, FiStar } from "react-icons/fi";
 import { useState } from "react";
 import { handleSubmit } from "@/app/signup/actions";
 import { motion } from "framer-motion";
+import Link from "next/link";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { useRouter } from "next/navigation";
+import { setUser } from "@/app/lib/features/userSlice/userSlice";
+import { useDispatch } from "react-redux";
+import { handleUserCreation } from "@/utils/reduxActions/reduxActions";
+
 
 
 export const SlideInAuth = () => {
   return (
-    <section className="grid grid-cols-1 md:grid-cols-[1fr,_400px] lg:grid-cols-[1fr,_600px] bg-background min-h-screen">
-      <Logo />
+    <section className="grid grid-cols-1 md:grid-cols-[1fr,_400px] lg:grid-cols-[1fr,_600px] bg-background pt-24 pb-12 min-h-screen d">
       <Form />
       <SupplementalContent />
+      <ToastContainer position="bottom-right" />
     </section>
   );
 };
@@ -18,6 +26,21 @@ export const SlideInAuth = () => {
 const Form = () => {
 
     const [error, setError] = useState<string | null>(null);
+    const dispatch = useDispatch()
+    const router = useRouter();
+
+    const onSubmitRegister = async (e: React.FormEvent<HTMLFormElement>) => {
+      e.preventDefault(); 
+      const formData = new FormData(e.currentTarget);
+  
+      try {
+        const response = await handleSubmit(formData); 
+        
+        response.success ? handleUserCreation(response.data, dispatch, router) : toast.error("An error occurred.")
+      } catch (error: any) {
+        toast.error(error.message || "An error occurred."); 
+      }
+    };
 
     return (
         <motion.div
@@ -40,7 +63,7 @@ const Form = () => {
               Try it free for 30 days, no CC required
             </motion.p>
     
-            <form action={handleSubmit} className="w-full">
+            <form onSubmit={onSubmitRegister} className="w-full">
               <motion.div variants={primaryVariants} className="mb-2 w-full">
                 <label
                   htmlFor="email-input"
@@ -51,8 +74,9 @@ const Form = () => {
                 <input
                   id="email-input"
                   type="email"
+                  name="email"
                   placeholder="Enter your email"
-                  className="border-[1px] border-slate-300 px-2.5 py-1.5 rounded w-full focus:outline-indigo-600"
+                  className="border-[1px] border-slate-300 px-2.5 py-1.5 rounded w-full text-black focus:outline-indigo-600"
                   required
                 />
               </motion.div>
@@ -67,8 +91,9 @@ const Form = () => {
                 <input
                   id="password-input"
                   type="password"
+                  name="password"
                   placeholder="Enter your password"
-                  className="border-[1px] border-slate-300 px-2.5 py-1.5 rounded w-full focus:outline-indigo-600"
+                  className="border-[1px] border-slate-300 px-2.5 py-1.5 rounded w-full text-black focus:outline-indigo-600"
                   required
                 />
               </motion.div>
@@ -83,8 +108,9 @@ const Form = () => {
                 <input
                   id="rt-password-input"
                   type="password"
+                  name="rt-password"
                   placeholder="Re-type your password"
-                  className="border-[1px] border-slate-300 px-2.5 py-1.5 rounded w-full focus:outline-indigo-600"
+                  className="border-[1px] border-slate-300 px-2.5 py-1.5 rounded w-full text-black focus:outline-indigo-600"
                   required
                 />
               </motion.div>
@@ -117,9 +143,9 @@ const Form = () => {
               </motion.button>
               <motion.p variants={primaryVariants} className="text-xs">
                 Already have an account?{" "}
-                <a className="text-indigo-600 underline" href="#">
+                <Link className="text-indigo-600 underline" href="/login">
                   Sign in
-                </a>
+                </Link>
               </motion.p>
             </form>
           </div>
@@ -129,7 +155,7 @@ const Form = () => {
 
   const SupplementalContent = () => {
     return (
-      <div className="top-4 sticky bg-slate-950 m-4 rounded-3xl rounded-tl-[4rem] h-80 md:h-[calc(100vh_-_2rem)] overflow-hidden group">
+      <div className="top-4 sticky bg-slate-950 m-4 rounded-3xl rounded-tl-[4rem] h-80 md:h-[calc(90vh_-_2rem)] overflow-hidden group">
         <img
           alt="An example image"
           src="/imgs/abstract/18.jpg"
@@ -153,16 +179,15 @@ const Form = () => {
             className="mb-2 font-semibold text-3xl text-white lg:text-4xl leading-[1.25]"
             variants={primaryVariants}
           >
-            Connecting Designers
+           Como nos califican
             <br />
-            with Opportunities
+            nuestros mejores clientes
           </motion.h2>
           <motion.p
             variants={primaryVariants}
             className="mb-6 max-w-md text-slate-300 text-sm"
           >
-            Bloop is the home of makers, making amazing things, and getting paid.
-            Find your dream job with us.
+          Con el respaldo de mas de 1000 clientes, nos posicionamos como una de la mejores marcas
           </motion.p>
           <div className="flex items-center gap-4">
             <div className="flex items-center">
